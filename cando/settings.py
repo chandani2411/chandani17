@@ -32,9 +32,10 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'registration',
     'django.contrib.admin',
     'django.contrib.sites',
-    'registration',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -96,3 +97,4 @@ ACCOUNT_ACTIVATION_DAYS=7
 REGISTRATION_AUTO_LOGIN = True
 REGISTRATION_OPEN = True
 LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL='/'

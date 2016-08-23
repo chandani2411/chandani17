@@ -32,7 +32,7 @@ router.register(r'reply', views.ReplyViewSet)
 
 urlpatterns = patterns('',
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^comments/', include('userlogin.urls')),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

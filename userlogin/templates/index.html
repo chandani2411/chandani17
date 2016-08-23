@@ -1,0 +1,119 @@
+
+{% extends "base.html" %}
+{% load i18n %}
+<html lang="en">
+{% block js %}
+
+
+
+<script>
+
+
+{#$(".reply").hide();#}
+function comfun(id) {
+    $("#"+id).toggle();
+}
+function likes(id) {
+
+
+        $.get('/comments/add_like/', {comment_id: id}, function (data) {
+
+            $('#likecount_'+id).text(data);
+            $('#like').hide();
+
+        });
+
+    }
+
+
+
+</script>
+
+
+{% endblock %}
+
+
+{% block content %}
+<div class="dsf" >
+
+<form method="post" action="{% url 'post_comment' %}">
+
+    {% csrf_token %}
+
+      <input type="text" name="comment" />
+      <input type="hidden" value="comment" name="type" />
+      <input type ="submit" value="post_comment "  />
+
+</form>
+</div>
+
+<hr/>
+
+ <ul>
+
+    {% for i in comments %}
+
+        <h3 class="try" >{{ i.comment }}</h3>
+
+        {% if user.is_authenticated %}
+             <strong id="likecount_{{ i.id }}">{{ i.like}}</strong>
+          <button class="btn btn-default btn-sm"  id="likeme_{{ i.id }}" type="button" data-comid="{{ i.id }}" onclick="likes({{ i.id }})">
+              <span class="glyphicon glyphicon-thumbs-up">Like</span>
+
+          </button>
+
+
+        {% endif %}
+
+        <a class="abc" onclick="comfun({{ i.id }})">Reply to Comment</a>
+
+
+            <div class="reply"  id="{{ i.id }}"style="display:none" >
+
+                    <form method="POST" action="{% url 'post_comment' %}">
+                        {% csrf_token %}
+                        <input type="text" name="reply" />
+                         <input type="hidden" value="{{ i.id}}" name="comment"/>
+                         <input type="hidden" value="reply" name="type" />
+                         <input type ="submit" value="add_reply " />
+
+
+                    </form>
+
+
+
+
+           </div>
+
+
+
+        <ul>
+            <div class="swa" >
+
+                {% for r in i.reply_set.all %}
+                     <div class="well well-sm">
+                        <h5>{{ r.reply }}</h5>
+                     </div>
+
+            </div>
+
+
+
+          {% endfor %}
+        </ul>
+
+    {% endfor %}
+
+ </ul>
+
+
+
+{% endblock %}
+
+
+
+
+</html>
+
+
+

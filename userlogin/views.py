@@ -18,10 +18,11 @@ from  rest_framework.decorators import detail_route, list_route
 
 
 def post_comment(request):
-    comments = Comment.objects.all()
+
+    comments = Comment.objects.order_by("-id")
     form1 = CommentForm()
     form2 = ReplyForm()
-
+    com_id=None
     if request.method == "POST":
         print request.POST['type']
         if request.POST['type'] =="comment":
@@ -38,14 +39,38 @@ def post_comment(request):
                   reply.save()
                   redirect('/comments/')
 
+
+
+
     else:
         form1 = CommentForm()
         form2 = ReplyForm()
-    return render(request, 'registration/index.html', {'form1':form1,'form2':form2, "comments":comments})
+    return render(request, 'index.html', {'form1':form1,'form2':form2, "comments":comments})
 
 
 
+def add_like(request):
 
+    com_id=None
+
+    if request.method == 'GET':
+
+        com_id = request.GET['comment_id']
+
+
+
+    like = 0
+
+    if com_id:
+        comments = Comment.objects.get(id=(int(com_id)))
+
+        if comments:
+
+            like = comments.like + 1
+            comments.like = like
+            comments.save()
+
+    return HttpResponse(like)
 
 
 
@@ -75,6 +100,10 @@ class ReplyViewSet(viewsets.ModelViewSet):
 
     serializer_class = ReplySerializer
     queryset = Reply.objects.all()
+
+
+
+
 
 
 
